@@ -57,9 +57,22 @@ fi
 #set url
 name=$(echo "ss search")
 
-#list mages to check
+keywords=$(cat <<EOF
+raspberry
+ssd
+extra line
+EOF
+)
+
+
+
+#list pages to check. One page includes 30 items
 pages2check=$(cat <<EOF
 https://www.ss.lv/lv/electronics/computers/today-5/
+https://www.ss.lv/lv/electronics/computers/today-5/page2.html
+https://www.ss.lv/lv/electronics/computers/today-5/page3.html
+https://www.ss.lv/lv/electronics/computers/today-5/page4.html
+https://www.ss.lv/lv/electronics/computers/today-5/page5.html
 extra line
 EOF
 )
@@ -73,13 +86,14 @@ python ../html-downloader.py $onepage $tmp/product.log
 
 #create a list of all items
 items2check=$(sed "s/\d034/\n/g" $tmp/product.log | grep "^/msg" | sort | uniq | sed '$athis is last line')
-echo "$items2check"
+#echo "$items2check"
 
 #take one item by item on compare it to database
 printf %s "$items2check" | while IFS= read -r item
 do {
 
-grep "$item" $db > /dev/null
+#I must modify tail number every time I change [pages2check] array
+tail -150 $db | grep "$item" > /dev/null
 if [ $? -ne 0 ]; then
 echo new = $item
 #there is unchecked items on the internet
@@ -87,9 +101,27 @@ echo new = $item
 #extract the main text from div#msg_div_msg
 msg_div_msg=$(wget -qO- www.ss.lv$item | sed "s/<div/\n<div/g" | grep -v "<div.*ads_sys_div_msg\|<script" | grep -A100 "msg_div_msg" | sed "s/<\/div>/\n<\/div>\n/g" | sed '/<\/div>/,$d' | sed -e "s/<[^>]*>//g")
 
-echo "$msg_div_msg"
-echo
-echo
+
+
+
+printf %s "$keywords" | while IFS= read -r key
+do {
+echo "$msg_div_msg" | grep -i "$key"
+if [ $? -ne 0 ]; then
+
+emails=$(cat ../posting | sed '$aend of file')
+printf %s "$emails" | while IFS= read -r onemail
+do {
+python ../send-email.py "$onemail" "$key found" "www.ss.lv$item 
+`echo "$msg_div_msg"`"
+} done
+
+fi
+
+} done
+
+
+
 
 echo "$item">> $db
 else 
