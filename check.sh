@@ -76,11 +76,7 @@ do {
 python ../html-downloader.py $page $tmp/product.log
 
 #create a list of all items
-items2check=$(cat <<EOF
-`sed "s/\d034/\n/g" $tmp/product.log | grep "^/msg" | sort | uniq`
-extra line
-EOF
-)
+items2check=$(sed "s/\d034/\n/g" $tmp/product.log | grep "^/msg" | sort | uniq)
 
 #take one item by item on compare it to database
 printf %s "$items2check" | while IFS= read -r item
