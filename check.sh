@@ -99,6 +99,8 @@ EOF
 printf %s "$pages2check" | while IFS= read -r onepage
 do {
 
+echo "processing $onepage"
+
 #download one page
 python ../html-downloader.py $onepage $tmp/product.log
 
@@ -111,7 +113,7 @@ printf %s "$items2check" | while IFS= read -r item
 do {
 
 #I must modify tail number every time I change [pages2check] array
-tail -600 $db | grep "$item" > /dev/null
+tail -9999 $db | grep "$item" > /dev/null
 if [ $? -ne 0 ]; then
 echo new = $item
 #there is unchecked items on the internet
