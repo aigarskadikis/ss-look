@@ -60,10 +60,6 @@ name=$(echo "ss search")
 #list mages to check
 pages2check=$(cat <<EOF
 https://www.ss.lv/lv/electronics/computers/today-5/
-https://www.ss.lv/lv/electronics/computers/today-5/page2.html
-https://www.ss.lv/lv/electronics/computers/today-5/page3.html
-https://www.ss.lv/lv/electronics/computers/today-5/page4.html
-https://www.ss.lv/lv/electronics/computers/today-5/page5.html
 extra line
 EOF
 )
@@ -73,7 +69,7 @@ printf %s "$pages2check" | while IFS= read -r onepage
 do {
 
 #download one page
-python ../html-downloader.py $page $tmp/product.log
+python ../html-downloader.py $onepage $tmp/product.log
 
 #create a list of all items
 items2check=$(sed "s/\d034/\n/g" $tmp/product.log | grep "^/msg" | sort | uniq)
