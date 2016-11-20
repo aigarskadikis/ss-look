@@ -1,6 +1,6 @@
 #!/bin/sh
 
-#git clone https://github.com/catonrug/ss-raspberry.git && cd ss-raspberry && chmod +x check.sh && ./check.sh
+#git clone https://github.com/catonrug/ss-look.git && cd ss-look && chmod +x check.sh && ./check.sh
 
 #check if script is located in /home direcotry
 pwd | grep "^/home/" > /dev/null
@@ -97,10 +97,10 @@ else
 echo $item is already in database
 fi
 
-}
+} done
 #end of item check
 
-}
+} done
 #end of page check
 
 #clean and remove whole temp direcotry
