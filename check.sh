@@ -107,7 +107,7 @@ msg_div_msg=$(wget -qO- www.ss.lv$item | sed "s/<div/\n<div/g" | grep -v "<div.*
 printf %s "$keywords" | while IFS= read -r key
 do {
 echo "$msg_div_msg" | grep -i "$key"
-if [ $? -ne 0 ]; then
+if [ $? -eq 0 ]; then
 
 emails=$(cat ../posting | sed '$aend of file')
 printf %s "$emails" | while IFS= read -r onemail
