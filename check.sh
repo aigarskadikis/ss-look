@@ -59,11 +59,12 @@ name=$(echo "ss search")
 
 keywords=$(cat <<EOF
 raspberry
-ssd
+asus
+playstation4
+playstation 4
 extra line
 EOF
 )
-
 
 
 #list pages to check. One page includes 30 items
@@ -73,6 +74,21 @@ https://www.ss.lv/lv/electronics/computers/today-5/page2.html
 https://www.ss.lv/lv/electronics/computers/today-5/page3.html
 https://www.ss.lv/lv/electronics/computers/today-5/page4.html
 https://www.ss.lv/lv/electronics/computers/today-5/page5.html
+https://www.ss.lv/lv/electronics/computers/today-5/page6.html
+https://www.ss.lv/lv/electronics/computers/today-5/page7.html
+https://www.ss.lv/lv/electronics/computers/today-5/page8.html
+https://www.ss.lv/lv/electronics/computers/today-5/page9.html
+https://www.ss.lv/lv/electronics/computers/today-5/page10.html
+https://www.ss.lv/lv/electronics/computers/today-5/page11.html
+https://www.ss.lv/lv/electronics/computers/today-5/page12.html
+https://www.ss.lv/lv/electronics/computers/today-5/page13.html
+https://www.ss.lv/lv/electronics/computers/today-5/page14.html
+https://www.ss.lv/lv/electronics/computers/today-5/page15.html
+https://www.ss.lv/lv/electronics/computers/today-5/page16.html
+https://www.ss.lv/lv/electronics/computers/today-5/page17.html
+https://www.ss.lv/lv/electronics/computers/today-5/page18.html
+https://www.ss.lv/lv/electronics/computers/today-5/page19.html
+https://www.ss.lv/lv/electronics/computers/today-5/page20.html
 extra line
 EOF
 )
@@ -93,7 +109,7 @@ printf %s "$items2check" | while IFS= read -r item
 do {
 
 #I must modify tail number every time I change [pages2check] array
-tail -150 $db | grep "$item" > /dev/null
+tail -600 $db | grep "$item" > /dev/null
 if [ $? -ne 0 ]; then
 echo new = $item
 #there is unchecked items on the internet
@@ -102,14 +118,12 @@ echo new = $item
 msg_div_msg=$(wget -qO- www.ss.lv$item | sed "s/<div/\n<div/g" | grep -v "<div.*ads_sys_div_msg\|<script" | grep -A100 "msg_div_msg" | sed "s/<\/div>/\n<\/div>\n/g" | sed '/<\/div>/,$d' | sed -e "s/<[^>]*>//g")
 
 
-
-
 printf %s "$keywords" | while IFS= read -r key
 do {
 echo "$msg_div_msg" | grep -i "$key"
 if [ $? -eq 0 ]; then
 
-emails=$(cat ../posting | sed '$aend of file')
+emails=$(cat ../maintenance | sed '$aend of file')
 printf %s "$emails" | while IFS= read -r onemail
 do {
 python ../send-email.py "$onemail" "$key found" "www.ss.lv$item 
@@ -119,8 +133,6 @@ python ../send-email.py "$onemail" "$key found" "www.ss.lv$item
 fi
 
 } done
-
-
 
 
 echo "$item">> $db
