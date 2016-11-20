@@ -78,10 +78,16 @@ items2check=$(sed "s/\d034/\n/g" $tmp/product.log | grep "^/msg" | sort | uniq)
 printf %s "$items2check" | while IFS= read -r item
 do {
 
-grep "$item" $db
+grep "$item" $db > /dev/null
 if [ $? -ne 0 ]; then
 #there is unchecked items on the internet
-wget -qO- www.ss.lv$item | sed "s/<div/\n<div/g" | grep -v "<div.*ads_sys_div_msg\|<script" | grep -A100 "msg_div_msg" | sed "s/<\/div>/\n<\/div>\n/g" | sed '/<\/div>/,$d' | sed -e "s/<[^>]*>//g"
+
+#extract the main text from div#msg_div_msg
+msg_div_msg=$(wget -qO- www.ss.lv$item | sed "s/<div/\n<div/g" | grep -v "<div.*ads_sys_div_msg\|<script" | grep -A100 "msg_div_msg" | sed "s/<\/div>/\n<\/div>\n/g" | sed '/<\/div>/,$d' | sed -e "s/<[^>]*>//g")
+
+echo "$msg_div_msg"
+echo
+echo
 
 echo "$item">> $db
 else 
