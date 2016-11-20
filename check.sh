@@ -80,6 +80,7 @@ do {
 
 grep "$item" $db > /dev/null
 if [ $? -ne 0 ]; then
+echo new = $item
 #there is unchecked items on the internet
 
 #extract the main text from div#msg_div_msg
@@ -92,7 +93,7 @@ echo
 echo "$item">> $db
 else 
 #this item is already in database
-echo $item is already in database
+echo old = $item
 fi
 
 } done
