@@ -59,9 +59,8 @@ name=$(echo "ss search")
 
 keywords=$(cat <<EOF
 raspberry
-asus
-playstation4
-playstation 4
+banana pi
+bananapi
 extra line
 EOF
 )
