@@ -61,6 +61,9 @@ keywords=$(cat <<EOF
 raspberry
 banana pi
 bananapi
+zbox
+beebox
+arduino
 extra line
 EOF
 )
